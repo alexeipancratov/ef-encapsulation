@@ -1,3 +1,4 @@
+using EFCoreEncapsulation.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EFCoreEncapsulation.Api;
@@ -7,10 +8,12 @@ namespace EFCoreEncapsulation.Api;
 public class StudentController : ControllerBase
 {
     private readonly StudentRepository _studentRepository;
+    private readonly CourseRepository _courseRepository;
 
-    public StudentController(StudentRepository studentRepository)
+    public StudentController(StudentRepository studentRepository, CourseRepository courseRepository)
     {
         _studentRepository = studentRepository;
+        _courseRepository = courseRepository;
     }
 
     [HttpGet("{id}")]

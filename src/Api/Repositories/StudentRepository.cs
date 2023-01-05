@@ -1,14 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace EFCoreEncapsulation.Api;
+namespace EFCoreEncapsulation.Api.Repositories;
 
-public class StudentRepository
+public class StudentRepository : Repository<Student>
 {
-    private readonly SchoolContext _schoolContext;
-    
     public StudentRepository(SchoolContext schoolContext)
+        : base(schoolContext)
     {
-        _schoolContext = schoolContext;
     }
 
     public Student GetByIdSplitQueries(long id)
@@ -23,7 +21,7 @@ public class StudentRepository
     }
 
     // This approach is identical but produces cleaner SQL queries.
-    public Student GetById(long id)
+    public override Student GetById(long id)
     {
         var student = _schoolContext.Students.Find(id);
 
@@ -36,5 +34,13 @@ public class StudentRepository
         _schoolContext.Entry(student).Collection(s => s.SportsEnrollments).Load();
 
         return student;
+    }
+
+    // Could be used for register, enrolling student in a course, to update a student
+    public override void Save(Student student)
+    {
+        _schoolContext.Students.Add(student);
+        _schoolContext.Students.Update(student);
+        _schoolContext.Students.Attach(student);
     }
 }

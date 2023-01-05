@@ -1,3 +1,4 @@
+using EFCoreEncapsulation.Api.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace EFCoreEncapsulation.Api;
@@ -21,6 +22,7 @@ public class Program
             new SchoolContext(builder.Configuration["ConnectionString"], useConsoleLogger: true));
         
         builder.Services.AddTransient<StudentRepository>();
+        builder.Services.AddTransient<CourseRepository>();
 
         builder.Services.AddControllers();
 
