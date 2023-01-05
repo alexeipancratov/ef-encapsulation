@@ -1,4 +1,5 @@
-using EFCoreEncapsulation.Api.Repositories;
+using EFCoreEncapsulation.Api.Aggregates.CourseAggregate;
+using EFCoreEncapsulation.Api.Aggregates.StudentAggregate;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EFCoreEncapsulation.Api;

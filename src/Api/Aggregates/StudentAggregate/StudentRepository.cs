@@ -1,6 +1,7 @@
+using EFCoreEncapsulation.Api.Abstract;
 using Microsoft.EntityFrameworkCore;
 
-namespace EFCoreEncapsulation.Api.Repositories;
+namespace EFCoreEncapsulation.Api.Aggregates.StudentAggregate;
 
 public class StudentRepository : Repository<Student>
 {
@@ -11,7 +12,7 @@ public class StudentRepository : Repository<Student>
 
     public Student GetByIdSplitQueries(long id)
     {
-        return _schoolContext.Students
+        return SchoolContext.Students
             .Include(s => s.Enrollments)
             .ThenInclude(e => e.Course)
             .Include(s => s.SportsEnrollments)
@@ -23,15 +24,15 @@ public class StudentRepository : Repository<Student>
     // This approach is identical but produces cleaner SQL queries.
     public override Student GetById(long id)
     {
-        var student = _schoolContext.Students.Find(id);
+        var student = SchoolContext.Students.Find(id);
 
         if (student == null)
         {
             return null;
         }
 
-        _schoolContext.Entry(student).Collection(s => s.Enrollments).Load();
-        _schoolContext.Entry(student).Collection(s => s.SportsEnrollments).Load();
+        SchoolContext.Entry(student).Collection(s => s.Enrollments).Load();
+        SchoolContext.Entry(student).Collection(s => s.SportsEnrollments).Load();
 
         return student;
     }
@@ -39,8 +40,8 @@ public class StudentRepository : Repository<Student>
     // Could be used for register, enrolling student in a course, to update a student
     public override void Save(Student student)
     {
-        _schoolContext.Students.Add(student);
-        _schoolContext.Students.Update(student);
-        _schoolContext.Students.Attach(student);
+        SchoolContext.Students.Add(student);
+        SchoolContext.Students.Update(student);
+        SchoolContext.Students.Attach(student);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace EFCoreEncapsulation.Api;
+﻿namespace EFCoreEncapsulation.Api.Aggregates.CourseAggregate;
 
 public class Course
 {

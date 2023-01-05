@@ -1,5 +1,6 @@
-﻿namespace EFCoreEncapsulation.Api;
+﻿namespace EFCoreEncapsulation.Api.Aggregates.StudentAggregate;
 
+// Aggregate root
 public class Student
 {
     public long Id { get; set; }
