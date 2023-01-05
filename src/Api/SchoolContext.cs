@@ -63,7 +63,9 @@ public sealed class SchoolContext : DbContext
             x.Property(p => p.Email);
             x.Property(p => p.Name);
             x.HasMany(p => p.Enrollments).WithOne(p => p.Student);
-            // x.Navigation(s => s.Enrollments).AutoInclude(); // With AutoInclude we don't really need our own repository anymore.
+            x.Navigation(s => s.Enrollments).AutoInclude(); // With AutoInclude we don't really need our own repository anymore.
+            x.HasMany(s => s.SportsEnrollments).WithOne(se => se.Student);
+            x.Navigation(s => s.SportsEnrollments).AutoInclude();
         });
         modelBuilder.Entity<Course>(x =>
         {
@@ -77,7 +79,7 @@ public sealed class SchoolContext : DbContext
             x.Property(p => p.Id).HasColumnName("EnrollmentID");
             x.HasOne(p => p.Student).WithMany(p => p.Enrollments);
             x.HasOne(p => p.Course).WithMany();
-            // x.Navigation(e => e.Course).AutoInclude();
+            x.Navigation(e => e.Course).AutoInclude();
             x.Property(p => p.Grade);
         });
         modelBuilder.Entity<Sports>(x =>
@@ -91,8 +93,9 @@ public sealed class SchoolContext : DbContext
             x.ToTable("SportsEnrollment").HasKey(k => k.Id);
             x.Property(p => p.Id).HasColumnName("SportsEnrollmentID");
             x.HasOne(p => p.Student).WithMany(p => p.SportsEnrollments);
-            x.Property(p => p.SportsId);
+            x.HasOne(se => se.Sports).WithMany();
             x.Property(p => p.Grade);
+            x.Navigation(se => se.Sports).AutoInclude();
         });
     }
 }

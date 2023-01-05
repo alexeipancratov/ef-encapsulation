@@ -13,12 +13,13 @@ public class StudentRepository
 
     public Student GetById(long id)
     {
-        return _schoolContext.Students
-            .Include(s => s.Enrollments)
-            .ThenInclude(e => e.Course)
-            .Include(s => s.SportsEnrollments)
-            .ThenInclude(se => se.Sports)
-            //.AsSplitQuery()  -- test without it first
-            .SingleOrDefault(s => s.Id == id);
+        //return _schoolContext.Students
+        //    .Include(s => s.Enrollments)
+        //    .ThenInclude(e => e.Course)
+        //    .Include(s => s.SportsEnrollments)
+        //    .ThenInclude(se => se.Sports)
+        //    //.AsSplitQuery()  -- test without it first
+        //    .SingleOrDefault(s => s.Id == id);
+        return _schoolContext.Students.Find(id);
     }
 }

@@ -23,7 +23,7 @@ public class SportsEnrollment
     public Grade Grade { get; set; }
     public long SportsId { get; set; }
     public Student Student { get; set; }
-    public ICollection<Sports> Sports { get; set; }
+    public Sports Sports { get; set; }
 }
 
 public class Sports
