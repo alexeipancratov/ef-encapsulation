@@ -14,7 +14,7 @@ public class Student
     public string EnrollIn(Course course, Grade grade)
     {
         // This is why it's important to always load the entire aggregate from DB with all of its related data.
-        if (Enrollments.Any(e => e.Course.Id == course.Id))
+        if (Enrollments.Any(e => e.CourseId == course.Id))
         {
             return $"Student has been already enrolled in course with ID {course.Id}";
         }
@@ -22,7 +22,7 @@ public class Student
         Enrollments.Add(new Enrollment
         {
             Student = this,
-            Course = course,
+            CourseId = course.Id,
             Grade = grade
         });
 
