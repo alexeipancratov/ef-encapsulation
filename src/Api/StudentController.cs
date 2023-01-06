@@ -39,4 +39,25 @@ public class StudentController : ControllerBase
             }).ToList()
         };
     }
+
+    [HttpPost]
+    public void Register()
+    {
+        var student = new Student();
+        
+        _studentRepository.Save(student);
+    }
+
+    [HttpPost]
+    public string Enroll(long studentId, long courseId, Grade grade)
+    {
+        var student = _studentRepository.GetById(studentId);
+        var course = _courseRepository.GetById(courseId);
+
+        string result = student.EnrollIn(course, grade);
+        
+        _studentRepository.Save(student);
+
+        return result;
+    }
 }

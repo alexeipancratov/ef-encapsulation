@@ -1,4 +1,6 @@
-﻿namespace EFCoreEncapsulation.Api.Aggregates.StudentAggregate;
+﻿using EFCoreEncapsulation.Api.Aggregates.CourseAggregate;
+
+namespace EFCoreEncapsulation.Api.Aggregates.StudentAggregate;
 
 // Aggregate root
 public class Student
@@ -8,4 +10,22 @@ public class Student
     public string Email { get; set; }
     public ICollection<Enrollment> Enrollments { get; set; }
     public ICollection<SportsEnrollment> SportsEnrollments { get; set; }
+
+    public string EnrollIn(Course course, Grade grade)
+    {
+        // This is why it's important to always load the entire aggregate from DB with all of its related data.
+        if (Enrollments.Any(e => e.Course.Id == course.Id))
+        {
+            return $"Student has been already enrolled in course with ID {course.Id}";
+        }
+        
+        Enrollments.Add(new Enrollment
+        {
+            Student = this,
+            Course = course,
+            Grade = grade
+        });
+
+        return "OK";
+    }
 }
