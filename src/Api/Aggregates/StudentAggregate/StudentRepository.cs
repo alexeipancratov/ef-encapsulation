@@ -11,6 +11,18 @@ public class StudentRepository : Repository<Student>
     {
     }
 
+    public IReadOnlyList<Student> GetAll(string emailDomain)
+    {
+        IQueryable<Student> students = SchoolContext.Set<Student>();
+
+        if (!string.IsNullOrWhiteSpace(emailDomain))
+        {
+            students = students.Where(s => s.Email.EndsWith(emailDomain));
+        }
+
+        return students.ToList();
+    }
+
     //public Student GetByIdSplitQueries(long id)
     //{
     //    return SchoolContext.Students
@@ -26,7 +38,7 @@ public class StudentRepository : Repository<Student>
     // The main thing here is that we avoided the Read/Write model mismatch.
     public StudentDto GetDto(long id)
     {
-        var student = SchoolContext.Students.Find(id);
+        var student = SchoolContext.Set<Student>().Find(id);
 
         var enrollments = SchoolContext.Set<EnrollmentData>()
             .FromSqlInterpolated($@"
@@ -54,7 +66,7 @@ public class StudentRepository : Repository<Student>
     // NOTE: If you care about performance too much, you can also add some params to retrieve related collections if needed.
     public override Student GetById(long id)
     {
-        var student = SchoolContext.Students.Find(id);
+        var student = SchoolContext.Set<Student>().Find(id);
 
         if (student == null)
         {
@@ -70,8 +82,8 @@ public class StudentRepository : Repository<Student>
     // Could be used for register, enrolling student in a course, to update a student
     public override void Save(Student student)
     {
-        SchoolContext.Students.Add(student);
-        SchoolContext.Students.Update(student);
-        SchoolContext.Students.Attach(student);
+        SchoolContext.Set<Student>().Add(student);
+        SchoolContext.Set<Student>().Update(student);
+        SchoolContext.Set<Student>().Attach(student);
     }
 }

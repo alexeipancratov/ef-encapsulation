@@ -13,11 +13,30 @@ public class StudentController : ControllerBase
     private readonly CourseRepository _courseRepository;
     private readonly SchoolContext _schoolContext;
 
-    public StudentController(StudentRepository studentRepository, CourseRepository courseRepository, SchoolContext schoolContext)
+    public StudentController(StudentRepository studentRepository, CourseRepository courseRepository,
+        SchoolContext schoolContext)
     {
         _studentRepository = studentRepository;
         _courseRepository = courseRepository;
         _schoolContext = schoolContext;
+    }
+
+    [HttpGet]
+    public IReadOnlyList<StudentDto> Get()
+    {
+        return _studentRepository.GetAll(".com")
+            .Select(MapToDto)
+            .ToList();
+    }
+
+    private StudentDto MapToDto(Student student)
+    {
+        return new StudentDto
+        {
+            StudentId = student.Id,
+            Name = student.Name,
+            Email = student.Email
+        };
     }
 
     [HttpGet("{id}")]
@@ -53,7 +72,7 @@ public class StudentController : ControllerBase
     public void Register()
     {
         var student = new Student();
-        
+
         _studentRepository.Save(student);
     }
 
@@ -64,7 +83,7 @@ public class StudentController : ControllerBase
         var course = _courseRepository.GetById(courseId);
 
         string result = student.EnrollIn(course, grade);
-        
+
         _studentRepository.Save(student);
 
         return result;

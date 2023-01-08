@@ -5,13 +5,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EFCoreEncapsulation.Api;
 
+// NOTE: We haven't created a custom UnitOfWork on top of it since
+// there's nothing to put on that level of abstraction in our case.
+// In rare cases it makes sense to create it.
+// NOTE: No DbSets so that consumers would use repositories instead only.
+// DbContext would be used to define the scope of change tracking and for calling the SaveChanges.
 public sealed class SchoolContext : DbContext
 {
     private readonly string _connectionString;
     private readonly bool _useConsoleLogger;
-    public DbSet<Student> Students { get; set; }
-    public DbSet<Course> Courses { get; set; }
-    public DbSet<Enrollment> Enrollments { get; set; }
 
     // public SchoolContext(DbContextOptions<SchoolContext> options)
     //     : base(options)
